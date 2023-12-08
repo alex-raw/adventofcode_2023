@@ -35,7 +35,7 @@ function solve2(maps::Vector{Vector{Int}}, offset::Int, l::Int)::Int
     return minimum(s.start for s in ranges)
 end
 
-function solve(path::String; part2=false)::Tuple{Int, Int}
+function solve(path::String)::Tuple{Int, Int}
     seeds, maps... = read(path, String) |>
         x -> eachsplit(x, "\n\n") .|>
         x -> eachmatch(r"\d+", x) .|>

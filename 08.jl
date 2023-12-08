@@ -1,8 +1,8 @@
 using Test
-using Base.Iterators: countfrom, cycle
+using Base.Iterators: cycle
 
 function walk(network::Dict, instr::String, init::AbstractString, isend::Function)::Int
-    for (steps, i) in zip(countfrom(1), cycle(instr))
+    for (steps, i) in enumerate(cycle(instr))
         init = network[init][i == 'L' ? 1 : 2]
         isend(init) && return steps
     end
@@ -18,4 +18,4 @@ end
 
 @test solve("examples/08.txt") == (6, 6)
 @test solve("data/08.txt") == (22411, 11188774513823)
-@time solve("data/08.txt")
+@time solve("data/08.txt"); @time solve("data/08.txt")
