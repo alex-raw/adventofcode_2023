@@ -7,9 +7,8 @@ function solve(path::String)::Tuple{Int, Int}
         highest = Dict("red" => 0, "green" => 0, "blue" => 0)
 
         for m in eachmatch(r"(\d+) (\w+)", line)
-            n = parse(Int, m.captures[1])
-            color = m.captures[2]
-            highest[color] = max(n, get(highest, color, 0))
+            n, color = m.captures
+            highest[color] = max(parse(Int, n), highest[color])
         end
 
         if highest["red"] <= 12 && highest["green"] <= 13 && highest["blue"] <= 14
@@ -23,4 +22,5 @@ function solve(path::String)::Tuple{Int, Int}
 end
 
 @test solve("data/02.txt") == (2720, 71535)
+@time solve("data/02.txt") == (2720, 71535)
 @time solve("data/02.txt") == (2720, 71535)

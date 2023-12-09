@@ -1,23 +1,22 @@
 using Test
 
+function getnums(line::String)::Int
+    nums = filter(isnumeric, line)
+    return parse(Int, first(nums) * last(nums))
+end
+
+function getnums(line::String, r::Regex, lookup::Vector{String})::Int
+    m = collect(eachmatch(r, line))
+    f = @something tryparse(Int, first(m).match) findfirst(==(first(m).match), lookup)
+    l = @something tryparse(Int, last(m).match) findlast(==(last(m).match), lookup)
+    return f * 10 + l
+end
+
 function solve(path::String)::Tuple{Int, Int}
-    part1, part2 = 0, 0
-
-    digits = [["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-              string.('1':'9')]
-    r = Regex("\\d|" * join(digits, '|'))
-
-    for line in eachline(path)
-        nums = replace(line, r"\D" => "")
-        part1 += parse(Int, first(nums) * last(nums))
-
-        m = collect(eachmatch(r, line, overlap=true))
-        f = findfirst(==(first(m).match), digits)
-        l = findlast(==(last(m).match), digits)
-        part2 += mod1(f, 9) * 10 + mod1(l, 9)
-    end
-
-    return part1, part2
+    words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    r = Regex(join([words; "\\d"], '|'))
+    return sum(getnums, eachline(path)),
+           sum(x -> getnums(x, r, words), eachline(path))
 end
 
 @test solve("data/01.txt") == (53334, 52834)

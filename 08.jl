@@ -1,8 +1,8 @@
 using Test
 using Base.Iterators: cycle
 
-function walk(network::Dict, instr::String, init::AbstractString, isend::Function)::Int
-    for (steps, i) in enumerate(cycle(instr))
+function walk(network::Dict, dirs::String, init::AbstractString, isend::Function)::Int
+    for (steps, i) in enumerate(cycle(dirs))
         init = network[init][i == 'L' ? 1 : 2]
         isend(init) && return steps
     end
